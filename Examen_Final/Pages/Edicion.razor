@@ -1,5 +1,57 @@
-﻿<h3>Edicion</h3>
+﻿@page "/edicion/{Numcamaras}"
+@inject HttpClient http
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject NavigationManager NavigationManager
 
+<h3>Edicion</h3>
+
+<EditForm Model="@smartphones" OnValidSubmit="@Guardar">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label for="NumeroSerie">Ingrese NumeroSerie:</label>
+        <InputText id="NumeroSerie" @bind-Value="smartphones.Numserie" class="form-control" />
+        <ValidationMessage For="() => smartphones.Numserie" />
+    </div>
+    <div class="form-group">
+        <label for="Marca">Ingrese Marca:</label>
+        <InputText id="Marca" @bind-Value="smartphones.Marca" class="form-control" />
+        <ValidationMessage For="() => smartphones.Marca" />
+    </div>
+    <div class="form-group">
+        <label for="Modelo">Ingrese Modelo:</label>
+        <InputText id="Modelo" @bind-Value="smartphones.Modelo" class="form-control" />
+        <ValidationMessage For="() => smartphones.Modelo" />
+    </div>
+    <div class="form-group">
+        <label for="Sistemaoperativo">Ingrese Sistemaoperativo:</label>
+        <InputText id="Sistemaoperativo" @bind-Value="smartphones.Sistemaoperativo" class="form-control" />
+        <ValidationMessage For="() => smartphones.Sistemaoperativo" />
+    </div>
+    <div class="form-group">
+        <label for="Numcamaras">Ingrese Numcamaras:</label>
+        <InputText id="Numcamaras" @bind-Value="smartphones.Numcamaras" class="form-control" />
+        <ValidationMessage For="() => smartphones.Numcamaras" />
+    </div>
+    <div class="form-group">
+        <button type="Guardar" class="btn btn-primary">Guardar</button>
+    </div>
+</EditForm>
 @code {
+    private Smartphones smartphones = new Smartphones();
+    List<Smartphones> smart = new List<Smartphones>();
+    [Parameter]
+    public string Numcamaras { get; set; }
+    protected async Task Guardar()
+    {
+        await localStorage.SetItemAsync("smartphones", smart);
+        NavigationManager.NavigateTo("/ingreso-dispositivos");
 
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        smart = await localStorage.GetItemAsync<List<Smartphones>>("smartphones");
+
+        smartphones = smart.FirstOrDefault(c => c.Numcamaras == Numcamaras);
+    }
 }

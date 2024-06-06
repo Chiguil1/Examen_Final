@@ -48,7 +48,7 @@
                 <th>Modelo</th>
                 <th>SistemaOperativo</th>
                 <th>NumeroCamaras</th>
-                @* <th>Editar</th> *@
+                 <th>Editar</th> 
                 <th>Borrar</th>
             </tr>
         </thead>
@@ -61,10 +61,10 @@
                     <td>@smartphone.Modelo</td>
                     <td>@smartphone.Sistemaoperativo</td>
                     <td>@smartphone.Numcamaras</td>
-                    @* <button class="btn btn-warning"
-                            @onclick="@(() =>NavigationManager.NavigateTo($"/edicion/{electronico.Tamanio}"))">
+                     <button class="btn btn-warning"
+                            @onclick="@(() =>NavigationManager.NavigateTo($"/edicion/{smartphone.Numcamaras}"))">
                         Editar
-                    </button> *@
+                    </button> 
                     <td><button class="btn btn-danger" @onclick="@(()=>Borrar(smartphone.Numcamaras))">Eliminar</button></td>
                 </tr>
             }
