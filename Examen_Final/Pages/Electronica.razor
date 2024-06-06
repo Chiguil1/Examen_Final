@@ -35,20 +35,57 @@
     <div class="form-group">
         <button type="Guardar" class="btn btn-primary">Guardar</button>
     </div>
+    <p role="status">Datos ingresados: @datosingresados</p>
 </EditForm>
+
+@if (smartphones != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>NumeroSerie</th>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>SistemaOperativo</th>
+                <th>NumeroCamaras</th>
+                @* <th>Editar</th> *@
+                <th>Borrar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var smartphone in smart)
+            {
+                <tr>
+                    <td>@smartphone.Numserie</td>
+                    <td>@smartphone.Marca</td>
+                    <td>@smartphone.Modelo</td>
+                    <td>@smartphone.Sistemaoperativo</td>
+                    <td>@smartphone.Numcamaras</td>
+                    @* <button class="btn btn-warning"
+                            @onclick="@(() =>NavigationManager.NavigateTo($"/edicion/{electronico.Tamanio}"))">
+                        Editar
+                    </button> *@
+                    <td><button class="btn btn-danger" @onclick="@(()=>Borrar(smartphone.Numcamaras))">Eliminar</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
 @code {
     private Smartphones smartphones = new Smartphones();
     List<Smartphones> smart = new List<Smartphones>();
+    private int datosingresados = 1;
     protected async Task Guardar()
     {
         smart.Add(smartphones);
         smartphones = new Smartphones();
         await localStorage.SetItemAsync("smartphones", smart);
+        datosingresados++;
     }
     protected override async Task OnInitializedAsync()
     {
-        //smart = await localStorage.GetItemAsync<List<Smartphones>>("smartphones");
+        smart = await localStorage.GetItemAsync<List<Smartphones>>("smartphones");
     }
 
     protected async Task Borrar(string Numcamaras)
@@ -56,5 +93,6 @@
         Smartphones productoBorrar = smart.Find(c => c.Numcamaras == Numcamaras);
         smart.Remove(productoBorrar);
         await localStorage.SetItemAsync("smartphones", smart);
+        datosingresados--;
     }
 }
